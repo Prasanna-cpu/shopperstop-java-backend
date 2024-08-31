@@ -24,15 +24,15 @@ public interface ProductService {
 
     void deleteProduct(Long id) throws ProductNotFoundException;
 
-    List<Product> getProductsByCategory(String category) throws EmptyDataException;
+    List<Product> getProductsByCategory(String category) throws EmptyDataException, ProductNotFoundException;
 
-    List<Product> getProductsByBrand(String brand) throws EmptyDataException;
+    List<Product> getProductsByBrand(String brand) throws EmptyDataException, ProductNotFoundException;
 
-    List<Product> getProductsByCategoryAndBrand(String category, String brand) throws EmptyDataException;
+    List<Product> getProductsByCategoryAndBrand(String category, String brand) throws EmptyDataException, ProductNotFoundException;
 
-    List<Product> getProductsByName(String name) throws EmptyDataException;
+    List<Product> getProductsByName(String name) throws EmptyDataException, ProductNotFoundException;
 
-    List<Product> getProductsByBrandAndName(String category,String name) throws EmptyDataException;
+    List<Product> getProductsByBrandAndName(String category,String name) throws EmptyDataException, ProductNotFoundException;
 
     Long countProductsByBrandAndName(String brand,String name);
 

@@ -139,8 +139,8 @@ public class ProductServiceImplementation implements ProductService {
      * @return
      */
     @Override
-    public List<Product> getProductsByCategory(String category) throws EmptyDataException {
-        List<Product> products=productRepository.findByCategory(category);
+    public List<Product> getProductsByCategory(String category) throws EmptyDataException, ProductNotFoundException {
+        List<Product> products=productRepository.findByCategory(category).orElseThrow(()->new ProductNotFoundException("Given product not found"));
         if(products.isEmpty()){
             throw new EmptyDataException("No products of given category was found");
         }
@@ -152,8 +152,8 @@ public class ProductServiceImplementation implements ProductService {
      * @return
      */
     @Override
-    public List<Product> getProductsByBrand(String brand) throws EmptyDataException {
-        List<Product> products=productRepository.findByBrand(brand);
+    public List<Product> getProductsByBrand(String brand) throws EmptyDataException, ProductNotFoundException {
+        List<Product> products=productRepository.findByBrand(brand).orElseThrow(()->new ProductNotFoundException("Given product not found"));
         if(products.isEmpty()){
             throw new EmptyDataException("No products of given brand was found");
         }
@@ -166,8 +166,8 @@ public class ProductServiceImplementation implements ProductService {
      * @return
      */
     @Override
-    public List<Product> getProductsByCategoryAndBrand(String category, String brand) throws EmptyDataException {
-        List<Product> products=productRepository.findByCategoryAndBrand(category,brand);
+    public List<Product> getProductsByCategoryAndBrand(String category, String brand) throws EmptyDataException, ProductNotFoundException {
+        List<Product> products=productRepository.findByCategoryAndBrand(category,brand).orElseThrow(()->new ProductNotFoundException("Given product not found"));
         if(products.isEmpty()){
             throw new EmptyDataException("No products of given category and brand was found");
         }
@@ -180,8 +180,8 @@ public class ProductServiceImplementation implements ProductService {
      * @return
      */
     @Override
-    public List<Product> getProductsByName(String name) throws EmptyDataException {
-        List<Product> products=productRepository.findByName(name);
+    public List<Product> getProductsByName(String name) throws EmptyDataException, ProductNotFoundException {
+        List<Product> products=productRepository.findByName(name).orElseThrow(()->new ProductNotFoundException("Given product not found"));
         if(products.isEmpty()){
             throw new EmptyDataException("No products of given name was found");
         }
@@ -195,8 +195,8 @@ public class ProductServiceImplementation implements ProductService {
      * @return
      */
     @Override
-    public List<Product> getProductsByBrandAndName(String category, String name) throws EmptyDataException {
-        List<Product> products=productRepository.findByBrandAndName(category,name);
+    public List<Product> getProductsByBrandAndName(String category, String name) throws EmptyDataException, ProductNotFoundException {
+        List<Product> products=productRepository.findByBrandAndName(category,name).orElseThrow(()->new ProductNotFoundException("Given product not found"));
         if(products.isEmpty()){
             throw new EmptyDataException("No products of given brand or name was found");
         }

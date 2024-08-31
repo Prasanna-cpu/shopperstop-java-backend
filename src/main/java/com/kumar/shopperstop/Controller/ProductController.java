@@ -114,8 +114,8 @@ public class ProductController {
     }
 
 
+    @GetMapping("/products/name/{productName}")
     public ResponseEntity<ApiResponse> getProductsByName(@PathVariable String productName) throws ProductNotFoundException, EmptyDataException {
-
 
         List<Product> products=productService.getProductsByName(productName);
         try{

@@ -7,19 +7,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product,Long> {
 
-    List<Product> findByCategory(String category);
+    Optional<List<Product>> findByCategory(String category);
 
-    List<Product> findByBrand(String brand);
+    Optional<List<Product>> findByBrand(String brand);
 
-    List<Product> findByCategoryAndBrand(String category, String brand);
+    Optional<List<Product>> findByCategoryAndBrand(String category, String brand);
 
-    List<Product> findByName(String name);
+    Optional<List<Product>> findByName(String name);
 
-    List<Product> findByBrandAndName(String brand, String name);
+    Optional<List<Product>> findByBrandAndName(String brand, String name);
 
     Long countByBrandAndName(String brand ,String name);
 }
