@@ -85,8 +85,15 @@ public class ProductServiceImplementation implements ProductService {
      * @return
      */
     @Override
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public List<Product> getAllProducts() throws EmptyDataException {
+        List<Product> products=productRepository.findAll();
+
+        if(products.isEmpty()){
+            throw new EmptyDataException("No products found");
+        }
+        else{
+            return products;
+        }
     }
 
     /**
@@ -99,14 +106,6 @@ public class ProductServiceImplementation implements ProductService {
         return product;
     }
 
-    /**
-     * @param categoryId
-     * @return
-     */
-    @Override
-    public List<Product> getProductByCategoryId(Long categoryId) {
-        return List.of();
-    }
 
     /**
      * @param request
@@ -205,12 +204,13 @@ public class ProductServiceImplementation implements ProductService {
     }
 
     /**
-     * @param category
+     * @param brand
+     * @param name
      * @return
      */
     @Override
-    public Long countProductsByBrandAndName(String category) {
-        Long count=productRepository.countByBrandAndName(category);
+    public Long countProductsByBrandAndName(String brand,String name) {
+        Long count=productRepository.countByBrandAndName(brand,name);
         return count;
     }
 }

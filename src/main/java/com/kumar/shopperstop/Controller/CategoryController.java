@@ -48,6 +48,52 @@ public class CategoryController {
         }
     }
 
+    @GetMapping("/category/{id}/category")
+    public ResponseEntity<ApiResponse> getCategoryById(@PathVariable Long id) throws CategoryNotFoundException {
+        Category category=categoryService.getCategoryById(id);
+        try{
+            return ResponseEntity.ok(new ApiResponse("Category found",category));
+        }
+        catch(Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("Error in getting categories",e.getMessage()));
+        }
+    }
+
+    @GetMapping("/category/{name}/category")
+    public ResponseEntity<ApiResponse> getCategoryByName(@PathVariable String name) throws CategoryNotFoundException {
+        Category category=categoryService.getCategoryByName(name);
+        try{
+            return ResponseEntity.ok(new ApiResponse("Category found",category));
+        }
+        catch(Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("Error in getting categories",e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/category/{id}/category")
+    public ResponseEntity<ApiResponse> deleteCategory(@PathVariable Long id) throws CategoryNotFoundException {
+        categoryService.deleteCategory(id);
+        try{
+            return ResponseEntity.ok(new ApiResponse("Category deleted",null));
+        }
+        catch(Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("Error in deleting categories",e.getMessage()));
+        }
+    }
+
+
+
+
+
+
+
+
 
 
 }

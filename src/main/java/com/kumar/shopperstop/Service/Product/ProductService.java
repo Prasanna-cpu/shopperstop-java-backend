@@ -14,11 +14,11 @@ public interface ProductService {
 
     Product addProduct(AddProductRequest request);
 
-    List<Product> getAllProducts();
+    List<Product> getAllProducts() throws EmptyDataException;
 
     Product getProductById(Long id) throws ProductNotFoundException;
 
-    List<Product> getProductByCategoryId(Long categoryId);
+//    List<Product> getProductByCategoryId(Long categoryId);
 
     Product updateProduct(UpdateProductRequest product, Long productId) throws ProductNotFoundException;
 
@@ -34,6 +34,6 @@ public interface ProductService {
 
     List<Product> getProductsByBrandAndName(String category,String name) throws EmptyDataException;
 
-    Long countProductsByBrandAndName(String category);
+    Long countProductsByBrandAndName(String brand,String name);
 
 }
