@@ -1,5 +1,6 @@
 package com.kumar.shopperstop.Model.Category;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kumar.shopperstop.Model.Product.Product;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ public class Category {
     private String name;
 
     @OneToMany(mappedBy = "category")
+    @JsonIgnore
     private List<Product> products;
 
     public Category(String name) {

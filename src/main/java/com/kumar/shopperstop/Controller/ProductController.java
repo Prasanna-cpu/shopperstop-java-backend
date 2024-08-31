@@ -66,7 +66,7 @@ public class ProductController {
         }
 
     }
-    @PutMapping("/products/{productId}/update")
+    @PutMapping("/{productId}/update")
     public ResponseEntity<ApiResponse> updateProduct(@RequestBody UpdateProductRequest product, @PathVariable Long productId) throws ProductNotFoundException {
 
         Product updatedProduct=productService.updateProduct(product,productId);
@@ -83,7 +83,7 @@ public class ProductController {
 
     }
 
-    @DeleteMapping("/products/{productId}/delete")
+    @DeleteMapping("/{productId}/delete")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId) throws ProductNotFoundException {
 
         productService.deleteProduct(productId);
@@ -100,7 +100,7 @@ public class ProductController {
 
     }
 
-    @GetMapping("/products/brand/{brandName}/product/{productName}")
+    @GetMapping("/brand/{brandName}/name/{productName}")
     public ResponseEntity<ApiResponse> getProductByBrandAndName(@PathVariable String brandName,@PathVariable String productName) throws ProductNotFoundException, EmptyDataException {
         List<Product> products=productService.getProductsByBrandAndName(brandName,productName);
         try{
@@ -114,7 +114,7 @@ public class ProductController {
     }
 
 
-    @GetMapping("/products/name/{productName}")
+    @GetMapping("/name/{productName}")
     public ResponseEntity<ApiResponse> getProductsByName(@PathVariable String productName) throws ProductNotFoundException, EmptyDataException {
 
         List<Product> products=productService.getProductsByName(productName);
@@ -128,6 +128,72 @@ public class ProductController {
         }
 
     }
+
+    @GetMapping("/brand/{brand}")
+    public ResponseEntity<ApiResponse> getProductsByBrand(@PathVariable String brand) throws EmptyDataException, ProductNotFoundException {
+        List<Product> products=productService.getProductsByBrand(brand);
+        try{
+            return ResponseEntity.ok(new ApiResponse("Products found",products));
+        }
+        catch(Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("Operation failed",e.getMessage()));
+        }
+    }
+
+    @GetMapping("/products/category/{category}")
+    public ResponseEntity<ApiResponse> getProductsByCategory(@PathVariable String category) throws EmptyDataException, ProductNotFoundException {
+
+        List<Product> products=productService.getProductsByCategory(category);
+        try{
+            return ResponseEntity.ok(new ApiResponse("Products found",products));
+        }
+        catch(Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("Operation failed",e.getMessage()));
+        }
+
+    }
+
+    @GetMapping("/brand/{brand}/category/{category}")
+    public ResponseEntity<ApiResponse> getProductsByCategoryAndBrand(@PathVariable String brand , @PathVariable String category) throws EmptyDataException, ProductNotFoundException {
+
+        List<Product> products=productService.getProductsByCategoryAndBrand(brand,category);
+
+        try{
+            return ResponseEntity.ok(new ApiResponse("Products found",products));
+        }
+        catch(Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("Operation failed",e.getMessage()));
+        }
+
+    }
+
+
+    @GetMapping("/count-name-brand")
+    public ResponseEntity<ApiResponse> countProductsByBrandAndName(@RequestParam String brand, @RequestParam String name){
+        Long count= productService.countProductsByBrandAndName(brand,name);
+        try{
+            return ResponseEntity.ok(new ApiResponse("Products found",count));
+        }
+        catch(Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("Operation failed",e.getMessage()));
+        }
+
+    }
+
+
+
+
+
+
+
 
 
 

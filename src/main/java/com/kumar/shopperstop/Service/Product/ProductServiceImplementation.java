@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 @Slf4j
@@ -140,7 +140,7 @@ public class ProductServiceImplementation implements ProductService {
      */
     @Override
     public List<Product> getProductsByCategory(String category) throws EmptyDataException, ProductNotFoundException {
-        List<Product> products=productRepository.findByCategory(category).orElseThrow(()->new ProductNotFoundException("Given product not found"));
+        List<Product> products=productRepository.findByCategoryName(category).orElseThrow(()->new ProductNotFoundException("Given product not found"));
         if(products.isEmpty()){
             throw new EmptyDataException("No products of given category was found");
         }
@@ -167,7 +167,7 @@ public class ProductServiceImplementation implements ProductService {
      */
     @Override
     public List<Product> getProductsByCategoryAndBrand(String category, String brand) throws EmptyDataException, ProductNotFoundException {
-        List<Product> products=productRepository.findByCategoryAndBrand(category,brand).orElseThrow(()->new ProductNotFoundException("Given product not found"));
+        List<Product> products=productRepository.findByCategoryNameAndBrand(category,brand).orElseThrow(()->new ProductNotFoundException("Given product not found"));
         if(products.isEmpty()){
             throw new EmptyDataException("No products of given category and brand was found");
         }
