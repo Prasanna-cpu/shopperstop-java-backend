@@ -69,8 +69,7 @@ public class ImageServiceImplementation implements ImageService{
                 image.setFileName(file.getOriginalFilename());
                 image.setFileType(file.getContentType());
                 image.setImage(new SerialBlob(file.getBytes()));
-                image.setProduct(image.getProduct());
-
+                image.setProduct(product);
 
                 String buildDownloadUrl="/api/v1/images/image/download/";
                 String downloadUrl=buildDownloadUrl+"/api/v1/images/image/download/"+image.getId();

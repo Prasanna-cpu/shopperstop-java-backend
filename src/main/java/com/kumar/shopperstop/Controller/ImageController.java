@@ -30,6 +30,27 @@ public class ImageController {
     private final ImageService imageService;
     private final ImageRepository imageRepository;
 
+
+    @GetMapping("/image/{imageId}")
+    public ResponseEntity<ApiResponse> getImage(@PathVariable Long imageId) throws ImageNotFoundException {
+
+        Image image=imageService.getImageById(imageId);
+
+        try{
+
+
+            return ResponseEntity.ok(
+                    new ApiResponse("Image found",image)
+            );
+        }
+        catch (Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse("Image not found",e.getMessage()));
+        }
+
+    }
+
     @PostMapping("/upload")
     public ResponseEntity<ApiResponse> saveImages(@RequestParam List<MultipartFile> files, @RequestParam Long productId) {
 
@@ -91,7 +112,7 @@ public class ImageController {
     public ResponseEntity<ApiResponse> deleteImage(@PathVariable Long imageId) throws ImageNotFoundException {
         Image image=imageService.getImageById(imageId);
         try{
-            imageRepository.deleteById(imageId);
+            imageService.deleteImageById(imageId);
 
             return ResponseEntity.ok(
                     new ApiResponse("Deleted successfully",image)

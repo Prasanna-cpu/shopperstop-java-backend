@@ -1,6 +1,7 @@
 package com.kumar.shopperstop.Controller;
 
 
+import com.kumar.shopperstop.DTO.ProductDTO;
 import com.kumar.shopperstop.Exceptions.EmptyDataException;
 import com.kumar.shopperstop.Exceptions.ProductNotFoundException;
 import com.kumar.shopperstop.Model.Product.Product;
@@ -26,9 +27,11 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getAllProducts() throws EmptyDataException {
 
         List<Product> products=productService.getAllProducts();
+        List<ProductDTO> convertedProducts=productService.getConvertedProducts(products);
+
         try{
 
-            return ResponseEntity.ok(new ApiResponse("Products found",products));
+            return ResponseEntity.ok(new ApiResponse("Products found",convertedProducts));
         }
         catch(Exception e){
             return ResponseEntity
@@ -42,8 +45,10 @@ public class ProductController {
 
         Product product=productService.getProductById(productId);
 
+        ProductDTO productDTO=productService.mapToProductDTO(product);
+
         try{
-            return ResponseEntity.ok(new ApiResponse("Product found",product));
+            return ResponseEntity.ok(new ApiResponse("Product found",productDTO));
         }
         catch(Exception e){
             return ResponseEntity
@@ -54,9 +59,9 @@ public class ProductController {
     }
 
     @PostMapping("add")
-    public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product){
+    public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product) throws ProductNotFoundException {
+        Product addedProduct=productService.addProduct(product);
         try{
-            Product addedProduct=productService.addProduct(product);
             return ResponseEntity.ok(new ApiResponse("Product added",addedProduct));
         }
         catch(Exception e){
@@ -103,8 +108,9 @@ public class ProductController {
     @GetMapping("/brand/{brandName}/name/{productName}")
     public ResponseEntity<ApiResponse> getProductByBrandAndName(@PathVariable String brandName,@PathVariable String productName) throws ProductNotFoundException, EmptyDataException {
         List<Product> products=productService.getProductsByBrandAndName(brandName,productName);
+        List<ProductDTO> convertedProducts=productService.getConvertedProducts(products);
         try{
-            return ResponseEntity.ok(new ApiResponse("Products found",products));
+            return ResponseEntity.ok(new ApiResponse("Products found",convertedProducts));
         }
         catch(Exception e){
             return ResponseEntity
@@ -118,8 +124,11 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getProductsByName(@PathVariable String productName) throws ProductNotFoundException, EmptyDataException {
 
         List<Product> products=productService.getProductsByName(productName);
+
+        List<ProductDTO> convertedProducts=productService.getConvertedProducts(products);
+
         try{
-            return ResponseEntity.ok(new ApiResponse("Products found",products));
+            return ResponseEntity.ok(new ApiResponse("Products found",convertedProducts));
         }
         catch(Exception e){
             return ResponseEntity
@@ -132,8 +141,10 @@ public class ProductController {
     @GetMapping("/brand/{brand}")
     public ResponseEntity<ApiResponse> getProductsByBrand(@PathVariable String brand) throws EmptyDataException, ProductNotFoundException {
         List<Product> products=productService.getProductsByBrand(brand);
+        List<ProductDTO> convertedProducts=productService.getConvertedProducts(products);
+
         try{
-            return ResponseEntity.ok(new ApiResponse("Products found",products));
+            return ResponseEntity.ok(new ApiResponse("Products found",convertedProducts));
         }
         catch(Exception e){
             return ResponseEntity
@@ -142,12 +153,14 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/products/category/{category}")
+    @GetMapping("/category/{category}")
     public ResponseEntity<ApiResponse> getProductsByCategory(@PathVariable String category) throws EmptyDataException, ProductNotFoundException {
 
         List<Product> products=productService.getProductsByCategory(category);
+
+        List<ProductDTO> convertedProducts=productService.getConvertedProducts(products);
         try{
-            return ResponseEntity.ok(new ApiResponse("Products found",products));
+            return ResponseEntity.ok(new ApiResponse("Products found",convertedProducts));
         }
         catch(Exception e){
             return ResponseEntity
@@ -161,9 +174,9 @@ public class ProductController {
     public ResponseEntity<ApiResponse> getProductsByCategoryAndBrand(@PathVariable String brand , @PathVariable String category) throws EmptyDataException, ProductNotFoundException {
 
         List<Product> products=productService.getProductsByCategoryAndBrand(brand,category);
-
+        List<ProductDTO> convertedProducts=productService.getConvertedProducts(products);
         try{
-            return ResponseEntity.ok(new ApiResponse("Products found",products));
+            return ResponseEntity.ok(new ApiResponse("Products found",convertedProducts));
         }
         catch(Exception e){
             return ResponseEntity

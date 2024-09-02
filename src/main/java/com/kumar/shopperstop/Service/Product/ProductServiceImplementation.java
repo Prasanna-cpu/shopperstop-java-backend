@@ -1,17 +1,22 @@
 package com.kumar.shopperstop.Service.Product;
 
 
+import com.kumar.shopperstop.DTO.ImageDTO;
+import com.kumar.shopperstop.DTO.ProductDTO;
 import com.kumar.shopperstop.Exceptions.EmptyDataException;
 import com.kumar.shopperstop.Exceptions.ProductNotFoundException;
 import com.kumar.shopperstop.Model.Category.Category;
+import com.kumar.shopperstop.Model.Image.Image;
 import com.kumar.shopperstop.Model.Product.Product;
 import com.kumar.shopperstop.Repository.Category.CategoryRepository;
+import com.kumar.shopperstop.Repository.Image.ImageRepository;
 import com.kumar.shopperstop.Repository.Product.ProductRepository;
 import com.kumar.shopperstop.Request.AddProductRequest;
 import com.kumar.shopperstop.Request.UpdateProductRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +30,27 @@ public class ProductServiceImplementation implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ModelMapper modelMapper;
+    private final ImageRepository imageRepository;
+
+    @Override
+    public ProductDTO mapToProductDTO(Product product){
+        ProductDTO productDTO=modelMapper.map(product,ProductDTO.class);
+        List<Image> images=imageRepository.findByProductId(product.getId());
+
+        List<ImageDTO> imageDTOS=images.stream().map(
+                image->modelMapper.map(image,ImageDTO.class)
+        ).toList();
+        productDTO.setImages(imageDTOS);
+        return productDTO;
+    }
+
+    @Override
+    public List<ProductDTO> getConvertedProducts(List<Product> products){
+        return products.stream().map(this::mapToProductDTO).toList();
+    }
+
+
 
     private Product updateExistingProduct(UpdateProductRequest request,Product product) throws ProductNotFoundException {
         product.setName(request.getName());
@@ -56,7 +82,7 @@ public class ProductServiceImplementation implements ProductService {
      * @return
      */
     @Override
-    public Product addProduct(AddProductRequest request) {
+    public Product addProduct(AddProductRequest request) throws ProductNotFoundException {
 //        Category category= Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
 //                .orElseGet(
 //                        ()->{
@@ -67,17 +93,15 @@ public class ProductServiceImplementation implements ProductService {
 //        request.setCategory(category);
 //        return productRepository.save(createProduct(request,category));
 
-        boolean isCategoryPresent=categoryRepository.existsByName(request.getCategory().getName());
-
-        if(!isCategoryPresent){
-            Category newCategory=new Category(request.getCategory().getName());
-            categoryRepository.save(newCategory);
-            request.setCategory(newCategory);
-            return productRepository.save(createProduct(request,newCategory));
+        Category category;
+        if (!categoryRepository.existsByName(request.getCategory().getName())) {
+            category = new Category(request.getCategory().getName());
+            categoryRepository.save(category);
+        } else {
+            category = categoryRepository.findByName(request.getCategory().getName()).orElseThrow(()->new ProductNotFoundException("Given category not found"));
         }
-        else{
-            return null;
-        }
+        request.setCategory(category);
+        return productRepository.save(createProduct(request, category));
 
     }
 

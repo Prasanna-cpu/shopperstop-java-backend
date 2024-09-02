@@ -1,5 +1,6 @@
 package com.kumar.shopperstop.Service.Product;
 
+import com.kumar.shopperstop.DTO.ProductDTO;
 import com.kumar.shopperstop.Exceptions.EmptyDataException;
 import com.kumar.shopperstop.Exceptions.ProductNotFoundException;
 import com.kumar.shopperstop.Model.Product.Product;
@@ -11,8 +12,11 @@ import java.util.List;
 public interface ProductService {
 
 
+    ProductDTO mapToProductDTO(Product product);
 
-    Product addProduct(AddProductRequest request);
+    List<ProductDTO> getConvertedProducts(List<Product> products);
+
+    Product addProduct(AddProductRequest request) throws ProductNotFoundException;
 
     List<Product> getAllProducts() throws EmptyDataException;
 
@@ -35,5 +39,6 @@ public interface ProductService {
     List<Product> getProductsByBrandAndName(String category,String name) throws EmptyDataException, ProductNotFoundException;
 
     Long countProductsByBrandAndName(String brand,String name);
+
 
 }
