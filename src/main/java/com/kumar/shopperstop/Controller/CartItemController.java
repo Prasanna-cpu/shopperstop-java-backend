@@ -1,9 +1,11 @@
 package com.kumar.shopperstop.Controller;
 
 
+import com.kumar.shopperstop.DTO.CartDTO;
 import com.kumar.shopperstop.Exceptions.CartItemNotFoundException;
 import com.kumar.shopperstop.Exceptions.CartNotFoundException;
 import com.kumar.shopperstop.Exceptions.ProductNotFoundException;
+import com.kumar.shopperstop.Model.Cart.Cart;
 import com.kumar.shopperstop.Response.ApiResponse;
 import com.kumar.shopperstop.Service.Cart.CartService;
 import com.kumar.shopperstop.Service.CartItem.CartItemService;
@@ -33,10 +35,12 @@ public class CartItemController {
         }
 
         cartItemService.addCartItem(cartId,productId,quantity);
+        Cart cart = cartService.getCart(cartId);
+        CartDTO cartDTO = cartService.mapToCartDTO(cart);
 
         try{
             return ResponseEntity.ok(
-                    new ApiResponse("Item added to cart successfully",null)
+                    new ApiResponse("Item added to cart successfully",cartDTO)
             );
         }
         catch(Exception e){

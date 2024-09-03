@@ -20,6 +20,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -40,14 +41,14 @@ public class ProductServiceImplementation implements ProductService {
 
         List<ImageDTO> imageDTOS=images.stream().map(
                 image->modelMapper.map(image,ImageDTO.class)
-        ).toList();
+        ).collect(Collectors.toList());
         productDTO.setImages(imageDTOS);
         return productDTO;
     }
 
     @Override
     public List<ProductDTO> getConvertedProducts(List<Product> products){
-        return products.stream().map(this::mapToProductDTO).toList();
+        return products.stream().map(this::mapToProductDTO).collect(Collectors.toList());
     }
 
 
@@ -108,6 +109,7 @@ public class ProductServiceImplementation implements ProductService {
     /**
      * @return
      */
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     @Override
     public List<Product> getAllProducts() throws EmptyDataException {
         List<Product> products=productRepository.findAll();
@@ -124,6 +126,7 @@ public class ProductServiceImplementation implements ProductService {
      * @param id
      * @return
      */
+    @org.springframework.transaction.annotation.Transactional(readOnly = true)
     @Override
     public Product getProductById(Long id) throws ProductNotFoundException {
         Product product=productRepository.findById(id).orElseThrow(()->new ProductNotFoundException("Given product not found"));

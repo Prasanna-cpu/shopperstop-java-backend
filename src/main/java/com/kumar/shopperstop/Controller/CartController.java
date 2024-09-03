@@ -1,6 +1,7 @@
 package com.kumar.shopperstop.Controller;
 
 
+import com.kumar.shopperstop.DTO.CartDTO;
 import com.kumar.shopperstop.Exceptions.CartNotFoundException;
 import com.kumar.shopperstop.Model.Cart.Cart;
 import com.kumar.shopperstop.Response.ApiResponse;
@@ -22,10 +23,11 @@ public class CartController {
     @RequestMapping("/cart/{cartId}")
     public ResponseEntity<ApiResponse> getCart(@PathVariable Long cartId) throws CartNotFoundException {
         Cart cart=cartService.getCart(cartId);
+        CartDTO cartDTO=cartService.mapToCartDTO(cart);
 
         try{
             return ResponseEntity.ok(
-                    new ApiResponse("Cart found",cart)
+                    new ApiResponse("Cart found",cartDTO)
             );
         }
         catch (Exception e){
@@ -53,6 +55,7 @@ public class CartController {
     @GetMapping("/cart/{cartId}/total")
     public ResponseEntity<ApiResponse> getTotalAmount(@PathVariable Long cartId) throws CartNotFoundException {
         BigDecimal totalPrice=cartService.getTotalPrice(cartId);
+
 
         try {
             return ResponseEntity.ok(
