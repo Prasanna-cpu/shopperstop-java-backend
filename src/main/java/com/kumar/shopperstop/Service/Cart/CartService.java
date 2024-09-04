@@ -16,6 +16,8 @@ public interface CartService {
 
     BigDecimal getTotalPrice(Long id) throws CartNotFoundException;
 
+    Cart getCartByUserId(Long userId) throws CartNotFoundException;
+
 
     Long initializeNewCart();
 }

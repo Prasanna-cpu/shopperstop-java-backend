@@ -3,6 +3,7 @@ package com.kumar.shopperstop.Model.Cart;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kumar.shopperstop.Model.CartItem.CartItem;
+import com.kumar.shopperstop.Model.User.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +30,11 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true,fetch = FetchType.EAGER)
     private Set<CartItem> items=new HashSet<>();
+
+
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
 
     private void updateAmount(){

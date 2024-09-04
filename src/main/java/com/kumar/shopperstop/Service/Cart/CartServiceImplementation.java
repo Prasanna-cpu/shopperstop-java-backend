@@ -95,6 +95,12 @@ public class CartServiceImplementation implements CartService {
     }
 
     @Override
+    public Cart getCartByUserId(Long userId) throws CartNotFoundException {
+        Cart cart=cartRepository.findByUserId(userId).orElseThrow(()->new CartNotFoundException("Cart not found"));
+        return cart;
+    }
+
+    @Override
     public Long initializeNewCart(){
         Cart newCart=new Cart();
         Long newCartId=cartIdGenerator.incrementAndGet();
