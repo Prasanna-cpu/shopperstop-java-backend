@@ -1,6 +1,7 @@
 package com.kumar.shopperstop.Controller;
 
 
+import com.kumar.shopperstop.DTO.UserDTO;
 import com.kumar.shopperstop.Exceptions.ExistingUserException;
 import com.kumar.shopperstop.Exceptions.UserNotFoundException;
 import com.kumar.shopperstop.Model.User.User;
@@ -16,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/${api.prefix}/users")
+@RequestMapping("${api.prefix}/users")
 @RequiredArgsConstructor
 public class UserController {
     private final UserRepository userRepository;
@@ -28,11 +29,13 @@ public class UserController {
     public ResponseEntity<ApiResponse> getUserById(@PathVariable Long id) throws UserNotFoundException {
         User user=userService.getUserById(id);
 
+        UserDTO userDTO=userService.mapToUserDTO(user);
+
         try{
             return ResponseEntity.ok(
                     new ApiResponse(
                             "User retrieved",
-                            user
+                            userDTO
                     )
             );
         }
@@ -55,12 +58,13 @@ public class UserController {
             @RequestBody CreateUserRequest request
     ) throws ExistingUserException {
         User user=userService.createUser(request);
+        UserDTO userDTO=userService.mapToUserDTO(user);
 
         try{
             return ResponseEntity.ok(
                     new ApiResponse(
                             "User created",
-                            user
+                            userDTO
                     )
             );
         }
@@ -82,12 +86,13 @@ public class UserController {
     public ResponseEntity<ApiResponse> updateUser(@RequestBody UpdateUserRequest request,@PathVariable Long id) throws UserNotFoundException {
 
         User user=userService.updateUser(id,request);
+        UserDTO userDTO=userService.mapToUserDTO(user);
 
         try{
             return ResponseEntity.ok(
                     new ApiResponse(
                             "User updated",
-                            user
+                            userDTO
                     )
             );
         }

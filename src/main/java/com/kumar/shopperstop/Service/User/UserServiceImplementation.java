@@ -1,5 +1,6 @@
 package com.kumar.shopperstop.Service.User;
 
+import com.kumar.shopperstop.DTO.UserDTO;
 import com.kumar.shopperstop.Exceptions.ExistingUserException;
 import com.kumar.shopperstop.Exceptions.UserNotFoundException;
 import com.kumar.shopperstop.Model.User.User;
@@ -9,6 +10,7 @@ import com.kumar.shopperstop.Request.UpdateUserRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,6 +22,13 @@ import java.util.Optional;
 public class UserServiceImplementation implements UserService{
 
     private final UserRepository userRepository;
+
+    private final ModelMapper modelMapper;
+
+    @Override
+    public UserDTO mapToUserDTO(User user) {
+        return modelMapper.map(user, UserDTO.class);
+    }
 
     @Override
     public User getUserById(Long userId) throws UserNotFoundException {

@@ -4,6 +4,7 @@ package com.kumar.shopperstop.Service.Product;
 import com.kumar.shopperstop.DTO.ImageDTO;
 import com.kumar.shopperstop.DTO.ProductDTO;
 import com.kumar.shopperstop.Exceptions.EmptyDataException;
+import com.kumar.shopperstop.Exceptions.ExistingProductException;
 import com.kumar.shopperstop.Exceptions.ProductNotFoundException;
 import com.kumar.shopperstop.Model.Category.Category;
 import com.kumar.shopperstop.Model.Image.Image;
@@ -52,8 +53,18 @@ public class ProductServiceImplementation implements ProductService {
     }
 
 
+    private boolean productExists(String name,String brand){
+
+        return productRepository.existsByNameAndBrand(name,brand);
+
+    }
+
+
 
     private Product updateExistingProduct(UpdateProductRequest request,Product product) throws ProductNotFoundException {
+
+
+
         product.setName(request.getName());
         product.setBrand(request.getBrand());
         product.setPrice(request.getPrice());
@@ -83,7 +94,7 @@ public class ProductServiceImplementation implements ProductService {
      * @return
      */
     @Override
-    public Product addProduct(AddProductRequest request) throws ProductNotFoundException {
+    public Product addProduct(AddProductRequest request) throws ProductNotFoundException, ExistingProductException {
 //        Category category= Optional.ofNullable(categoryRepository.findByName(request.getCategory().getName()))
 //                .orElseGet(
 //                        ()->{
@@ -93,6 +104,11 @@ public class ProductServiceImplementation implements ProductService {
 //                );
 //        request.setCategory(category);
 //        return productRepository.save(createProduct(request,category));
+
+        if(productExists(request.getName(),request.getBrand())){
+            throw new ExistingProductException("Product already exists: "+request.getName()+" "+request.getBrand());
+        }
+
 
         Category category;
         if (!categoryRepository.existsByName(request.getCategory().getName())) {

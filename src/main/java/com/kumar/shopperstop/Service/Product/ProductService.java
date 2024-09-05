@@ -2,6 +2,7 @@ package com.kumar.shopperstop.Service.Product;
 
 import com.kumar.shopperstop.DTO.ProductDTO;
 import com.kumar.shopperstop.Exceptions.EmptyDataException;
+import com.kumar.shopperstop.Exceptions.ExistingProductException;
 import com.kumar.shopperstop.Exceptions.ProductNotFoundException;
 import com.kumar.shopperstop.Model.Product.Product;
 import com.kumar.shopperstop.Request.AddProductRequest;
@@ -16,7 +17,7 @@ public interface ProductService {
 
     List<ProductDTO> getConvertedProducts(List<Product> products);
 
-    Product addProduct(AddProductRequest request) throws ProductNotFoundException;
+    Product addProduct(AddProductRequest request) throws ProductNotFoundException, ExistingProductException;
 
     List<Product> getAllProducts() throws EmptyDataException;
 

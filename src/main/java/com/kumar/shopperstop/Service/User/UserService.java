@@ -1,5 +1,6 @@
 package com.kumar.shopperstop.Service.User;
 
+import com.kumar.shopperstop.DTO.UserDTO;
 import com.kumar.shopperstop.Exceptions.ExistingUserException;
 import com.kumar.shopperstop.Exceptions.UserNotFoundException;
 import com.kumar.shopperstop.Model.User.User;
@@ -7,6 +8,8 @@ import com.kumar.shopperstop.Request.CreateUserRequest;
 import com.kumar.shopperstop.Request.UpdateUserRequest;
 
 public interface UserService {
+
+    UserDTO mapToUserDTO(User user);
 
     User getUserById(Long userId) throws UserNotFoundException;
 

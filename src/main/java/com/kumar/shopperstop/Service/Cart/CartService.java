@@ -2,7 +2,9 @@ package com.kumar.shopperstop.Service.Cart;
 
 import com.kumar.shopperstop.DTO.CartDTO;
 import com.kumar.shopperstop.Exceptions.CartNotFoundException;
+import com.kumar.shopperstop.Exceptions.UserNotFoundException;
 import com.kumar.shopperstop.Model.Cart.Cart;
+import com.kumar.shopperstop.Model.User.User;
 
 import java.math.BigDecimal;
 
@@ -16,8 +18,8 @@ public interface CartService {
 
     BigDecimal getTotalPrice(Long id) throws CartNotFoundException;
 
-    Cart getCartByUserId(Long userId) throws CartNotFoundException;
+    Cart getCartByUserId(Long userId) throws CartNotFoundException, UserNotFoundException;
 
 
-    Long initializeNewCart();
+    Cart initializeNewCart(User user) throws CartNotFoundException, UserNotFoundException;
 }

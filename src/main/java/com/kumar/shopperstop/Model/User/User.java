@@ -1,6 +1,7 @@
 package com.kumar.shopperstop.Model.User;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kumar.shopperstop.Model.Cart.Cart;
 import com.kumar.shopperstop.Model.Order.Order;
 import jakarta.persistence.*;
@@ -36,7 +37,8 @@ public class User {
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,orphanRemoval = true)
     private Cart cart;
 
-    @OneToMany(mappedBy ="user",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy ="user",cascade = CascadeType.ALL,orphanRemoval = true,fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Order> order;
 
 

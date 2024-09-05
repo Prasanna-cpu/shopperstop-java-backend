@@ -1,6 +1,7 @@
 package com.kumar.shopperstop.Model.OrderItem;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kumar.shopperstop.Model.Order.Order;
 import com.kumar.shopperstop.Model.Product.Product;
 import jakarta.persistence.*;
@@ -21,12 +22,13 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
+    @JsonIgnore
     private Order order;
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
 

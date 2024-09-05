@@ -5,10 +5,13 @@ import com.kumar.shopperstop.DTO.CartDTO;
 import com.kumar.shopperstop.Exceptions.CartItemNotFoundException;
 import com.kumar.shopperstop.Exceptions.CartNotFoundException;
 import com.kumar.shopperstop.Exceptions.ProductNotFoundException;
+import com.kumar.shopperstop.Exceptions.UserNotFoundException;
 import com.kumar.shopperstop.Model.Cart.Cart;
+import com.kumar.shopperstop.Model.User.User;
 import com.kumar.shopperstop.Response.ApiResponse;
 import com.kumar.shopperstop.Service.Cart.CartService;
 import com.kumar.shopperstop.Service.CartItem.CartItemService;
+import com.kumar.shopperstop.Service.User.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,27 +23,25 @@ import org.springframework.web.bind.annotation.*;
 public class CartItemController {
 
     private final CartItemService cartItemService;
-
+    private final UserService userService;
     private final CartService cartService;
+
 
     @PostMapping("/item/add")
     public ResponseEntity<ApiResponse> addItemToCart(
-            @RequestParam(required = false) Long cartId,
+//            @RequestParam(required = false) Long cartId,
             @RequestParam Long productId,
             @RequestParam int quantity
-    ) throws ProductNotFoundException, CartNotFoundException {
+    ) throws ProductNotFoundException, CartNotFoundException, UserNotFoundException {
 
-        if(cartId==null){
-            cartId=cartService.initializeNewCart();
-        }
+        User user=userService.getUserById(1L);
+        Cart cart=cartService.initializeNewCart(user);
 
-        cartItemService.addCartItem(cartId,productId,quantity);
-        Cart cart = cartService.getCart(cartId);
-        CartDTO cartDTO = cartService.mapToCartDTO(cart);
+        cartItemService.addCartItem(cart.getId(),productId,quantity);
 
         try{
             return ResponseEntity.ok(
-                    new ApiResponse("Item added to cart successfully",cartDTO)
+                    new ApiResponse("Item added to cart successfully",null)
             );
         }
         catch(Exception e){

@@ -3,6 +3,7 @@ package com.kumar.shopperstop.Controller;
 
 import com.kumar.shopperstop.DTO.ProductDTO;
 import com.kumar.shopperstop.Exceptions.EmptyDataException;
+import com.kumar.shopperstop.Exceptions.ExistingProductException;
 import com.kumar.shopperstop.Exceptions.ProductNotFoundException;
 import com.kumar.shopperstop.Model.Product.Product;
 import com.kumar.shopperstop.Request.AddProductRequest;
@@ -59,7 +60,7 @@ public class ProductController {
     }
 
     @PostMapping("add")
-    public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product) throws ProductNotFoundException {
+    public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product) throws ProductNotFoundException, ExistingProductException {
         Product addedProduct=productService.addProduct(product);
         try{
             return ResponseEntity.ok(new ApiResponse("Product added",addedProduct));
