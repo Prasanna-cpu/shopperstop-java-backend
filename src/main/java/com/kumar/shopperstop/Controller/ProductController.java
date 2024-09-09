@@ -13,6 +13,7 @@ import com.kumar.shopperstop.Service.Product.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -59,6 +60,7 @@ public class ProductController {
 
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("add")
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product) throws ProductNotFoundException, ExistingProductException {
         Product addedProduct=productService.addProduct(product);
@@ -72,6 +74,7 @@ public class ProductController {
         }
 
     }
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/{productId}/update")
     public ResponseEntity<ApiResponse> updateProduct(@RequestBody UpdateProductRequest product, @PathVariable Long productId) throws ProductNotFoundException {
 
@@ -88,7 +91,7 @@ public class ProductController {
         }
 
     }
-
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{productId}/delete")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable Long productId) throws ProductNotFoundException {
 
