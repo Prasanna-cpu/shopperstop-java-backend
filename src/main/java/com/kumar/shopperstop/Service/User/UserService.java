@@ -19,5 +19,7 @@ public interface UserService {
 
     void deleteUser(Long id) throws UserNotFoundException;
 
+    User getAuthenticatedUser() throws UserNotFoundException;
+
 
 }

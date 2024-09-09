@@ -11,6 +11,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,8 +25,8 @@ import java.util.Optional;
 public class UserServiceImplementation implements UserService{
 
     private final UserRepository userRepository;
-
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDTO mapToUserDTO(User user) {
@@ -45,7 +48,7 @@ public class UserServiceImplementation implements UserService{
                     user.setEmail(request.getEmail());
                     user.setFirstName(request.getFirstName());
                     user.setLastName(request.getLastName());
-                    user.setPassword(request.getPassword());
+                    user.setPassword(passwordEncoder.encode(request.getPassword()));
                     return userRepository.save(user);
                 })
                 .orElseThrow(()->new ExistingUserException("User with given email already exists"));
@@ -68,5 +71,17 @@ public class UserServiceImplementation implements UserService{
     public void deleteUser(Long id) throws UserNotFoundException {
         User user = userRepository.findById(id).orElseThrow(()->new UserNotFoundException("User not found"));
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public User getAuthenticatedUser() throws UserNotFoundException {
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        String email=authentication.getName();
+        User user = userRepository
+                .findByEmail(email)
+                .orElseThrow(()->new UserNotFoundException("User not found with given email: "+email));
+
+        return user;
+
     }
 }

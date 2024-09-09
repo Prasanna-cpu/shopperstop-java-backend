@@ -12,6 +12,7 @@ import com.kumar.shopperstop.Response.ApiResponse;
 import com.kumar.shopperstop.Service.Cart.CartService;
 import com.kumar.shopperstop.Service.CartItem.CartItemService;
 import com.kumar.shopperstop.Service.User.UserService;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class CartItemController {
             @RequestParam int quantity
     ) throws ProductNotFoundException, CartNotFoundException, UserNotFoundException {
 
-        User user=userService.getUserById(1L);
+        User user=userService.getAuthenticatedUser();
         Cart cart=cartService.initializeNewCart(user);
 
         cartItemService.addCartItem(cart.getId(),productId,quantity);
@@ -43,6 +44,13 @@ public class CartItemController {
             return ResponseEntity.ok(
                     new ApiResponse("Item added to cart successfully",null)
             );
+        }
+        catch(JwtException e){
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(
+                            new ApiResponse("Unauthorized ",e.getMessage())
+                    );
         }
         catch(Exception e){
             return ResponseEntity
